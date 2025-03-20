@@ -70,6 +70,25 @@
         <!-- jQuery Library -->
         <script src="/assets/js/jquery.min.js"></script>
 
+        <!-- Firebase App (the core Firebase SDK) -->
+        <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+        <!-- Firebase Authentication -->
+        <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+        <script>
+            // Your web app's Firebase configuration
+            const firebaseConfig = {
+                apiKey: "YOUR_API_KEY",
+                authDomain: "YOUR_AUTH_DOMAIN",
+                projectId: "YOUR_PROJECT_ID",
+                storageBucket: "YOUR_STORAGE_BUCKET",
+                messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+                appId: "YOUR_APP_ID"
+            };
+            // Initialize Firebase
+            const app = firebase.initializeApp(firebaseConfig);
+            const auth = firebase.auth();
+        </script>
+
         <!-- Page Title and Generator Meta -->
         <title>Vixvvo | Video Production Services Salt Lake City, UT</title>
         <meta name="generator" content="SEOmatic">
@@ -128,6 +147,9 @@
                         <li>
                             <a href="#contactUs" class="nav-link"><span>Contact Us</span></a>
                         </li>
+                        <li>
+                            <a href="#admin" class="nav-link"><span>Admin</span></a>
+                        </li>
                     </ul>
                 </nav>
                 <!-- Optional Sidebar Logo at the Bottom (commented out) -->
@@ -149,6 +171,7 @@
                         <li><a href="#aboutUs" class="nav-link">About Us</a></li>
                         <li><a href="#reviews" class="nav-link">Reviews</a></li>
                         <li><a href="#contactUs" class="nav-link">Contact</a></li>
+                        <li><a href="#admin" class="nav-link">Admin</a></li>
                     </ul>
                 </nav>
 
@@ -564,7 +587,35 @@
                             </div>
                         </div>
                     </section>
-                    
+
+                    <!-- ========== -->
+                    <!-- ADMIN Section -->
+                    <!-- ========== -->
+                    <section id="admin" class="section">
+                        <div class="container d-flex h-100 align-items-center justify-content-center">
+                            <div class="col-md-6">
+                                <h6 class="sectionTitle">Admin Login</h6>
+                                <h2 class="text-light">Administration</h2>
+                                <form id="adminLoginForm">
+                                    <div class="form-group">
+                                        <label for="adminEmail">Email</label>
+                                        <input type="email" id="adminEmail" class="form-control" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="adminPassword">Password</label>
+                                        <input type="password" id="adminPassword" class="form-control" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Login</button>
+                                </form>
+                                <div id="adminContent" style="display:none;">
+                                    <h3>Welcome, Admin!</h3>
+                                    <p>You can now make changes to the website.</p>
+                                    <!-- Add your admin functionalities here -->
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
                     <!-- ========== -->
                     <!-- FOOTER Section -->
                     <!-- ========== -->
@@ -686,6 +737,21 @@
                 }
                 return null;
             }
+        </script>
+        <script>
+            document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('adminEmail').value;
+                const password = document.getElementById('adminPassword').value;
+                auth.signInWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        document.getElementById('adminLoginForm').style.display = 'none';
+                        document.getElementById('adminContent').style.display = 'block';
+                    })
+                    .catch((error) => {
+                        alert('Login failed: ' + error.message);
+                    });
+            });
         </script>
     </body>
 </html>
