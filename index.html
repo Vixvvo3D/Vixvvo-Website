@@ -138,6 +138,73 @@
                         errorMessage.style.display = 'block';
                     });
             });
+
+            // Show edit panel only if the user is logged in
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user) {
+                    showEditPanel();
+                }
+            });
+
+            function showEditPanel() {
+                document.getElementById('adminEditPanel').style.display = 'block';
+                const links = document.querySelectorAll('#whatWeDoContainer a.services');
+                links.forEach((link, index) => {
+                    const storedName = localStorage.getItem('sectionName_' + index);
+                    if (storedName) {
+                        link.textContent = storedName;
+                    }
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const editButton = document.getElementById('editButton');
+                if (editButton) {
+                    editButton.addEventListener('click', function () {
+                        const container = document.getElementById('whatWeDoContainer');
+                        if (!container) return;
+                        const linkElements = container.querySelectorAll('a.services');
+
+                        const saveButton = document.createElement('button');
+                        saveButton.textContent = 'Save';
+                        saveButton.className = 'btn btn-primary';
+                        saveButton.style.marginLeft = '10px';
+
+                        linkElements.forEach((link, index) => {
+                            const input = document.createElement('input');
+                            input.type = 'text';
+                            input.value = link.textContent;
+                            input.style.marginRight = '10px';
+                            input.dataset.index = index;
+                            link.parentNode.replaceChild(input, link);
+                        });
+
+                        this.parentNode.replaceChild(saveButton, this);
+
+                        saveButton.addEventListener('click', function () {
+                            const inputs = container.querySelectorAll('input[type="text"]');
+                            inputs.forEach((input) => {
+                                const newName = input.value;
+                                const idx = input.dataset.index;
+                                const newLink = document.createElement('a');
+                                newLink.className = 'services';
+                                newLink.href = '#';
+                                newLink.textContent = newName;
+                                input.parentNode.replaceChild(newLink, input);
+                                localStorage.setItem('sectionName_' + idx, newName);
+                            });
+
+                            const editButton = document.createElement('button');
+                            editButton.id = 'editButton';
+                            editButton.textContent = 'Edit';
+                            editButton.className = 'btn btn-secondary';
+                            editButton.style.marginTop = '20px';
+                            this.parentNode.replaceChild(editButton, this);
+                            editButton.addEventListener('click', arguments.callee);
+                        });
+                    });
+                }
+            });
         </script>
 
         <!-- Page Title and Generator Meta -->
@@ -363,7 +430,7 @@
                                     </div>
                                 </div>
                                 <!-- Right Column: Service Links and Background Image -->
-                                <div class="col-lg-7 servicesContainer">
+                                <div class="col-lg-7 servicesContainer" id="whatWeDoContainer">
                                     <a href="/video-consulting" class="services d-flex align-items-center justify-content-stretch p-2" style="position:relative; z-index:1;">
                                         <p>Video Consulting</p>
                                     </a>
@@ -384,6 +451,10 @@
                                     </a>
                                     <!-- Background Image for the Services Section -->
                                     <img id="servicesEagle" src="/assets/img/backgrounds/what-we-do.png" alt="" class="img-fluid" style="position:absolute; z-index:0;" />
+                                    <!-- Admin-only Edit Panel -->
+                                    <div id="adminEditPanel" style="margin-top: 20px; display: none;">
+                                        <button id="editButton" class="btn btn-secondary">Edit</button>
+                                    </div>
                                 </div>
                                 <!-- Trusted Clients Logos -->
                                 <div class="col-12 mt-100">
@@ -806,6 +877,73 @@
                         errorMessage.textContent = 'Login credentials invalid.';
                         errorMessage.style.display = 'block';
                     });
+            });
+
+            // Show edit panel only if the user is logged in
+            firebase.auth().onAuthStateChanged((user) => {
+                if (user) {
+                    showEditPanel();
+                }
+            });
+
+            function showEditPanel() {
+                document.getElementById('adminEditPanel').style.display = 'block';
+                const links = document.querySelectorAll('#whatWeDoContainer a.services');
+                links.forEach((link, index) => {
+                    const storedName = localStorage.getItem('sectionName_' + index);
+                    if (storedName) {
+                        link.textContent = storedName;
+                    }
+                });
+            }
+
+            document.addEventListener('DOMContentLoaded', function() {
+                const editButton = document.getElementById('editButton');
+                if (editButton) {
+                    editButton.addEventListener('click', function () {
+                        const container = document.getElementById('whatWeDoContainer');
+                        if (!container) return;
+                        const linkElements = container.querySelectorAll('a.services');
+
+                        const saveButton = document.createElement('button');
+                        saveButton.textContent = 'Save';
+                        saveButton.className = 'btn btn-primary';
+                        saveButton.style.marginLeft = '10px';
+
+                        linkElements.forEach((link, index) => {
+                            const input = document.createElement('input');
+                            input.type = 'text';
+                            input.value = link.textContent;
+                            input.style.marginRight = '10px';
+                            input.dataset.index = index;
+                            link.parentNode.replaceChild(input, link);
+                        });
+
+                        this.parentNode.replaceChild(saveButton, this);
+
+                        saveButton.addEventListener('click', function () {
+                            const inputs = container.querySelectorAll('input[type="text"]');
+                            inputs.forEach((input) => {
+                                const newName = input.value;
+                                const idx = input.dataset.index;
+                                const newLink = document.createElement('a');
+                                newLink.className = 'services';
+                                newLink.href = '#';
+                                newLink.textContent = newName;
+                                input.parentNode.replaceChild(newLink, input);
+                                localStorage.setItem('sectionName_' + idx, newName);
+                            });
+
+                            const editButton = document.createElement('button');
+                            editButton.id = 'editButton';
+                            editButton.textContent = 'Edit';
+                            editButton.className = 'btn btn-secondary';
+                            editButton.style.marginTop = '20px';
+                            this.parentNode.replaceChild(editButton, this);
+                            editButton.addEventListener('click', arguments.callee);
+                        });
+                    });
+                }
             });
         </script>
     </body>
