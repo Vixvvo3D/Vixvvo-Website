@@ -88,13 +88,38 @@
             // Initialize Firebase
             const app = firebase.initializeApp(firebaseConfig);
             const auth = firebase.auth();
+            
+            // Set authentication persistence to LOCAL
             auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
-  .then(() => {
-    console.log("Firebase auth persistence set to LOCAL.");
-  })
-  .catch((error) => {
-    console.error("Set persistence error: ", error);
-  });
+              .then(() => {
+                console.log("Firebase auth persistence set to LOCAL.");
+                })
+                .catch((error) => {
+                    console.error("Set persistence error: ", error);
+                });
+
+            // Handle authentication state changes
+            auth.onAuthStateChanged((user) => {
+                if (user) {
+                    // User is signed in.
+                    document.getElementById('adminLoginForm').style.display = 'none';
+                    document.getElementById('adminContent').style.display = 'block';
+                } else {
+                    // No user is signed in.
+                    document.getElementById('adminLoginForm').style.display = 'block';
+                    document.getElementById('adminContent').style.display = 'none';
+                }
+            });
+
+            // Logout function
+            function logout() {
+                auth.signOut().then(() => {
+                    document.getElementById('adminLoginForm').style.display = 'block';
+                    document.getElementById('adminContent').style.display = 'none';
+                }).catch((error) => {
+                    console.error("Logout error: ", error);
+                });
+            }
         </script>
         <script>
             // Admin login form submission handler
@@ -638,6 +663,7 @@
                                     <h3>Welcome, Admin!</h3>
                                     <p>You can now make changes to the website.</p>
                                     <!-- Add your admin functionalities here -->
+                                    <button onclick="logout()" class="btn btn-secondary">Logout</button>
                                 </div>
                             </div>
                         </div>
