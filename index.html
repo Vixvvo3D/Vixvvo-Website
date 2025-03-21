@@ -87,6 +87,21 @@
             // Initialize Firebase
             const app = firebase.initializeApp(firebaseConfig);
             const auth = firebase.auth();
+
+            // Admin login form submission handler
+            document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = document.getElementById('adminEmail').value;
+                const password = document.getElementById('adminPassword').value;
+                auth.signInWithEmailAndPassword(email, password)
+                    .then((userCredential) => {
+                        document.getElementById('adminLoginForm').style.display = 'none';
+                        document.getElementById('adminContent').style.display = 'block';
+                    })
+                    .catch((error) => {
+                        alert('Login failed: ' + error.message);
+                    });
+            });
         </script>
 
         <!-- Page Title and Generator Meta -->
