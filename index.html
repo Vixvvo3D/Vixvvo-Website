@@ -88,6 +88,13 @@
             // Initialize Firebase
             const app = firebase.initializeApp(firebaseConfig);
             const auth = firebase.auth();
+            auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+  .then(() => {
+    console.log("Firebase auth persistence set to LOCAL.");
+  })
+  .catch((error) => {
+    console.error("Set persistence error: ", error);
+  });
         </script>
         <script>
             // Admin login form submission handler
@@ -101,7 +108,9 @@
                         document.getElementById('adminContent').style.display = 'block';
                     })
                     .catch((error) => {
-                        alert('Login failed: ' + error.message);
+                        const errorMessage = document.getElementById('adminErrorMessage');
+                        errorMessage.textContent = 'Login credentials invalid.';
+                        errorMessage.style.display = 'block';
                     });
             });
         </script>
@@ -622,6 +631,7 @@
                                         <label for="adminPassword">Password</label>
                                         <input type="password" id="adminPassword" class="form-control" required>
                                     </div>
+                                    <div id="adminErrorMessage" style="display:none; color:red;"></div>
                                     <button type="submit" class="btn btn-primary">Login</button>
                                 </form>
                                 <div id="adminContent" style="display:none;">
@@ -766,7 +776,9 @@
                         document.getElementById('adminContent').style.display = 'block';
                     })
                     .catch((error) => {
-                        alert('Login failed: ' + error.message);
+                        const errorMessage = document.getElementById('adminErrorMessage');
+                        errorMessage.textContent = 'Login credentials invalid.';
+                        errorMessage.style.display = 'block';
                     });
             });
         </script>
